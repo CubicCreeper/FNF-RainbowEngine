@@ -85,7 +85,6 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		addOption(option);
 		option.scrollSpeed = 1.6;
 		option.minValue = 0.0;
-		option.maxValue = 1;
 		option.changeValue = 0.1;
 		option.decimals = 1;
 		option.onChange = onChangeHitsoundVolume;
@@ -98,7 +97,6 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 20;
 		option.minValue = -30;
-		option.maxValue = 30;
 		addOption(option);
 
 		var option:Option = new Option('Sick! Hit Window',
@@ -109,7 +107,6 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 15;
 		option.minValue = 15;
-		option.maxValue = 45;
 		addOption(option);
 
 		var option:Option = new Option('Good Hit Window',
@@ -120,7 +117,6 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 30;
 		option.minValue = 15;
-		option.maxValue = 90;
 		addOption(option);
 
 		var option:Option = new Option('Bad Hit Window',
@@ -131,7 +127,6 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 60;
 		option.minValue = 15;
-		option.maxValue = 135;
 		addOption(option);
 
 		var option:Option = new Option('Safe Frames',
@@ -141,7 +136,6 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			10);
 		option.scrollSpeed = 5;
 		option.minValue = 2;
-		option.maxValue = 10;
 		option.changeValue = 0.1;
 		addOption(option);
 
