@@ -210,6 +210,11 @@ class PlayState extends MusicBeatState
 
 	public var botplaySine:Float = 0;
 	public var botplayTxt:FlxText;
+	
+	var bambiTxt:FlxText;
+	var watermarkTxt:FlxText;
+	var ghostTappersOff:Bool = false;
+	var noOpponentNotes:Bool = false;
 
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
@@ -1084,6 +1089,17 @@ class PlayState extends MusicBeatState
 		// startCountdown();
 
 		generateSong(SONG.song);
+		if(SONG.disableGhostTapping && ClientPrefs.ghostTapping == true)
+			{
+				ClientPrefs.ghostTapping = false;
+				ghostTappersOff = true;
+			}
+		
+		if(SONG.disableOpponentNotes && ClientPrefs.opponentStrums == true)
+			{
+				ClientPrefs.opponentStrums = false;
+				noOpponentNotes = true;
+			}
 
 		// After all characters being loaded, it makes then invisible 0.01s later so that the player won't freeze when you change characters
 		// add(strumLine);
@@ -1153,6 +1169,49 @@ class PlayState extends MusicBeatState
 		scoreTxt.visible = !ClientPrefs.hideHud;
 		add(scoreTxt);
 		
+		if(SONG.credit != null) {
+			watermarkTxt = new FlxText(10, FlxG.height - 28, 0, 'By ' + SONG.credit + ' - ' + SONG.song + " - " + CoolUtil.difficultyString() + " - Rainbow Engine v0.2.0", 74);
+			watermarkTxt.scrollFactor.set();
+			watermarkTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			watermarkTxt.size = 18;
+			watermarkTxt.updateHitbox();
+			watermarkTxt.visible = !ClientPrefs.hideHud;
+			watermarkTxt.alpha = 0.6;
+			add(watermarkTxt);
+			}
+		else {
+			watermarkTxt = new FlxText(10, FlxG.height - 28, 0, SONG.song + " - " + CoolUtil.difficultyString() + " - Rainbow Engine v0.2.0", 74);
+			watermarkTxt.scrollFactor.set();
+			watermarkTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			watermarkTxt.size = 18;
+			watermarkTxt.updateHitbox();
+			watermarkTxt.visible = !ClientPrefs.hideHud;
+			watermarkTxt.alpha = 0.6;
+			add(watermarkTxt);
+			}
+		if (SONG.bambiText != null)
+			{
+				bambiTxt = new FlxText(10, FlxG.height - 28, 0, SONG.bambiText, 74);
+				bambiTxt.scrollFactor.set();
+				bambiTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+				bambiTxt.size = 18;
+				bambiTxt.updateHitbox();
+				bambiTxt.visible = !ClientPrefs.hideHud;
+				bambiTxt.alpha = 0.6;
+				add(bambiTxt);
+				watermarkTxt.y = FlxG.height - 50;
+			}
+		else {
+				bambiTxt = new FlxText(10, FlxG.height - 28, 0, null, 74);
+				bambiTxt.scrollFactor.set();
+				bambiTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+				bambiTxt.size = 18;
+				bambiTxt.updateHitbox();
+				bambiTxt.visible = !ClientPrefs.hideHud;
+				bambiTxt.alpha = 0.6;
+				add(bambiTxt);
+			}
+		
 		botplayTxt = new FlxText(400, timeBarBG.y + 55, FlxG.width - 800, "BOTPLAY", 32);
 		botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		botplayTxt.scrollFactor.set();
@@ -1171,6 +1230,8 @@ class PlayState extends MusicBeatState
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
+		watermarkTxt.cameras = [camHUD];
+		bambiTxt.cameras = [camHUD];
 		botplayTxt.cameras = [camHUD];
 		timeBar.cameras = [camHUD];
 		timeBarBG.cameras = [camHUD];
@@ -3817,6 +3878,32 @@ class PlayState extends MusicBeatState
 				} else {
 					FunkinLua.setVarInArray(this, value1, value2);
 				}
+			case 'Popup':
+				var title:String = (value1);
+				var message:String = (value2);
+				FlxG.sound.music.pause();
+				vocals.pause();
+
+				lime.app.Application.current.window.alert(message, title);
+				FlxG.sound.music.resume();
+				vocals.resume();
+			case 'Popup (No Pause)':
+				var title:String = (value1);
+				var message:String = (value2);
+
+				lime.app.Application.current.window.alert(message, title);
+			case 'Bambi Text Change':
+				var text:String = (value1);
+
+				bambiTxt.text = text;
+				if(bambiTxt.text == null || bambiTxt.text == "")
+					{
+						watermarkTxt.y = FlxG.height - 28;
+					}
+				else
+					{
+						watermarkTxt.y = FlxG.height - 50;
+					}
 		}
 		callOnLuas('onEvent', [eventName, value1, value2]);
 	}
@@ -4978,6 +5065,19 @@ class PlayState extends MusicBeatState
 	}
 
 	override function destroy() {
+		
+		if (ghostTappersOff)
+			{
+				ClientPrefs.ghostTapping = true;
+				ghostTappersOff = false;
+			}
+			
+		if (noOpponentNotes)
+			{
+				ClientPrefs.opponentStrums = true;
+				noOpponentNotes = false;
+			}
+		
 		for (lua in luaArray) {
 			lua.call('onDestroy', []);
 			lua.stop();

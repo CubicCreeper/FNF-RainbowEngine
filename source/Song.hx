@@ -28,6 +28,11 @@ typedef SwagSong =
 
 	var arrowOpponentSkin:String;
 	var arrowPlayerSkin:String;
+	var enableNoteStealing:Bool;
+	var credit:String;
+	var bambiText:String;
+	var disableGhostTapping:Bool;
+	var disableOpponentNotes:Bool;
 	var splashSkin:String;
 	var validScore:Bool;
 }

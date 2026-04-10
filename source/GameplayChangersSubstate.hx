@@ -43,44 +43,47 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		optionsArray.push(goption);
 
 		var option:GameplayOption = new GameplayOption('Scroll Speed', 'scrollspeed', 'float', 1);
-		option.scrollSpeed = 2.0;
-		option.minValue = 0.35;
-		option.changeValue = 0.05;
+		option.scrollSpeed = 100;
+		option.minValue = 0;
+		option.maxValue = 9223372036854775807;
+		option.changeValue = 1;
 		option.decimals = 2;
 		if (goption.getValue() != "constant")
 		{
 			option.displayFormat = '%vX';
-			option.maxValue = 3;
+			option.maxValue = 9223372036854775807;
 		}
 		else
 		{
 			option.displayFormat = "%v";
-			option.maxValue = 6;
+			option.maxValue = 9223372036854775807;
 		}
 		optionsArray.push(option);
 
 		#if !html5
 		var option:GameplayOption = new GameplayOption('Playback Rate', 'songspeed', 'float', 1);
-		option.scrollSpeed = 1;
-		option.minValue = 0.1;
-		option.maxValue = 100.0;
-		option.changeValue = 0.1;
+		option.scrollSpeed = 100;
+		option.minValue = 0;
+		option.maxValue = 9223372036854775807;
+		option.changeValue = 1;
 		option.displayFormat = '%vX';
 		option.decimals = 2;
 		optionsArray.push(option);
 		#end
 
 		var option:GameplayOption = new GameplayOption('Health Gain Multiplier', 'healthgain', 'float', 1);
-		option.scrollSpeed = 2.5;
+		option.scrollSpeed = 100;
 		option.minValue = 0;
-		option.changeValue = 0.1;
+		option.maxValue = 9223372036854775807;
+		option.changeValue = 1;
 		option.displayFormat = '%vX';
 		optionsArray.push(option);
 
 		var option:GameplayOption = new GameplayOption('Health Loss Multiplier', 'healthloss', 'float', 1);
-		option.scrollSpeed = 2.5;
-		option.minValue = 0.5;
-		option.changeValue = 0.1;
+		option.scrollSpeed = 100;
+		option.minValue = 0;
+		option.maxValue = 9223372036854775807;
+		option.changeValue = 1;
 		option.displayFormat = '%vX';
 		optionsArray.push(option);
 
@@ -247,18 +250,17 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 											if (curOption.getValue() == "constant")
 											{
 												oOption.displayFormat = "%v";
-												oOption.maxValue = 6;
+												oOption.maxValue = 9223372036854775807;
 											}
 											else
 											{
 												oOption.displayFormat = "%vX";
-												oOption.maxValue = 3;
+												oOption.maxValue = 9223372036854775807;
 												if(oOption.getValue() > 3) oOption.setValue(3);
 											}
 											updateTextFrom(oOption);
 										}
 									}
-									//trace(curOption.options[num]);
 							}
 							updateTextFrom(curOption);
 							curOption.change();
@@ -306,7 +308,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 					if(leOption.name == 'Scroll Speed')
 					{
 						leOption.displayFormat = "%vX";
-						leOption.maxValue = 3;
+						leOption.maxValue = 9223372036854775807;
 						if(leOption.getValue() > 3)
 						{
 							leOption.setValue(3);
@@ -444,10 +446,10 @@ class GameplayOption
 	
 			case 'percent':
 				displayFormat = '%v%';
-				changeValue = 0.01;
+				changeValue = 1;
 				minValue = 0;
-				maxValue = 1;
-				scrollSpeed = 0.5;
+				maxValue = 9223372036854775807;
+				scrollSpeed = 5;
 				decimals = 2;
 		}
 	}

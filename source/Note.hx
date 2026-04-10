@@ -124,9 +124,9 @@ class Note extends FlxSprite
 		noteSplashTexture = PlayState.SONG.splashSkin;
 		if (noteData > -1 && noteData < ClientPrefs.arrowHSV.length)
 		{
-			colorSwap.hue = ClientPrefs.arrowHSV[noteData % 4][0] / 360;
-			colorSwap.saturation = ClientPrefs.arrowHSV[noteData % 4][1] / 100;
-			colorSwap.brightness = ClientPrefs.arrowHSV[noteData % 4][2] / 100;
+			colorSwap.hue = ClientPrefs.arrowHSV[noteData][0] / 360;
+			colorSwap.saturation = ClientPrefs.arrowHSV[noteData][1] / 100;
+			colorSwap.brightness = ClientPrefs.arrowHSV[noteData][2] / 100;
 		}
 
 		if(noteData > -1 && noteType != value) {
@@ -186,10 +186,10 @@ class Note extends FlxSprite
 			colorSwap = new ColorSwap();
 			shader = colorSwap.shader;
 
-			x += swagWidth * (noteData % 4);
+			x += swagWidth * (noteData);
 			if(!isSustainNote && noteData > -1 && noteData < 4) { //Doing this 'if' check to fix the warnings on Senpai songs
 				var animToPlay:String = '';
-				animToPlay = colArray[noteData % 4];
+				animToPlay = colArray[noteData];
 				animation.play(animToPlay + 'Scroll');
 			}
 		}
@@ -197,9 +197,10 @@ class Note extends FlxSprite
 
 		if(isPlayer) texture = PlayState.SONG.arrowPlayerSkin;
 		
+		if(isPlayer && PlayState.SONG.enableNoteStealing && FlxG.random.bool(42)) texture = PlayState.SONG.arrowOpponentSkin;
 		
 		if(!isPlayer) texture = PlayState.SONG.arrowOpponentSkin;
-
+		
 		// trace(prevNote);
 
 		if(prevNote!=null)
@@ -207,15 +208,15 @@ class Note extends FlxSprite
 
 		if (isSustainNote && prevNote != null)
 		{
-			alpha = 0.6;
-			multAlpha = 0.6;
+			alpha = 1;
+			multAlpha = 1;
 			hitsoundDisabled = true;
 			if(ClientPrefs.downScroll) flipY = true;
 
 			offsetX += width / 2;
 			copyAngle = false;
 
-			animation.play(colArray[noteData % 4] + 'holdend');
+			animation.play(colArray[noteData] + 'holdend');
 
 			updateHitbox();
 
@@ -226,7 +227,7 @@ class Note extends FlxSprite
 
 			if (prevNote.isSustainNote)
 			{
-				prevNote.animation.play(colArray[prevNote.noteData % 4] + 'hold');
+				prevNote.animation.play(colArray[prevNote.noteData] + 'hold');
 
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.05;
 				if(PlayState.instance != null)
